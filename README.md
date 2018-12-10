@@ -12,7 +12,7 @@ The Script can be used to automate the configuration backup of network devices u
 7)	Network devices firmware should be in-line with industry standards
 8)	Add IP address of devices into hp.txt and Cisco.txt
 9)	Not recommended to run on any servers installed with SCCM, WDS or any other tftp services.
-10)	Login credential need to be encrypted and saved in a text file Pass.txt. Copy the pass.txt file into the script “content” folder
+10)	Login credential need to be encrypted and saved in a text file pass.txt. Copy the pass.txt file into the script “content” folder
 
 How to Convert
 
@@ -21,7 +21,7 @@ Open Administrative PowerShell window and execute the command below.
 "Temp123*" | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString | Out-File "C:\pass.txt”. 
 
 Password – Temp123*
-Output File – Pass.txt in C drive
+Output File – pass.txt in C drive
 
 # How to use the script
 
@@ -62,7 +62,9 @@ $tftp_server = "Enter your TFTP server ip address here"
 STEP 4)	Open script root folder and navigate to “Content folder”
 
 Replace Pass.txt with your encrypted device password key file
+
 Enter the IP address of HP devices into hp.txt
+
 Enter the IP address of Cisco devices into cisco.txt
 
 STEP 5)	Open a PowerShell (Administrative PS recommended)
@@ -70,18 +72,22 @@ STEP 5)	Open a PowerShell (Administrative PS recommended)
 STEP 6)	Navigate and set path to script root folder
 
 STEP 7)	If you want to backup HP devices configuration execute the below command
+
         PS>.\Network_switch_auto_backup.ps1 HP
          
          
 STEP 8)	If you want to backup CISCO devices configuration execute the below command
+
         PS>.\Network_switch_auto_backup.ps1 Cisco
         
 STEP 9)	If you want to backup HP and CISCO devices configuration execute the below command
+
         PS>.\Network_switch_auto_backup.ps1 Both
         
 STEP 10)	Output will be saved in your script root folder
 
 \2018\December\07122018\10.0.0.20\running-config.cfg
+
 \2018\December\07122018\10.0.0.20\startup-config.cfg
 
 STEP 11)	Logging is enabled on the script to troubleshoot the, check “logs” folder under the script root folder if you come across any errors.

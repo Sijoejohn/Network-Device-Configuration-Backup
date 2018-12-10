@@ -85,7 +85,7 @@ Begin {
 
         Write-Host ("Getting switch ip address from hp.txt list")
 
-        # Collect all the devices from switch_list.txt and put into the array
+        # Collect all the devices from hp.txt and put into the array
         $switches_array = @()
         $switches_array = Get-Content $ContentFolder\hp.txt
         foreach ($switch in $switches_array) {

@@ -8,9 +8,10 @@
 # Last Modified   :  10/12/2018
 # The Script can be used for the configuration backup of network devices which are accessible via ssh.
 # .SYNOPSIS
-# Usage Example   : PS>.\Network_switch_auto_backup.ps1 hp
-#                 : PS>.\Network_switch_auto_backup.ps1 cisco
-#                 : PS>.\Network_switch_auto_backup.ps1 Both
+# Usage Example   : PS>.\Network_switch_auto_backup.ps1 hp (For HP network switches)
+#                 : PS>.\Network_switch_auto_backup.ps1 cisco (For cisco network switches)
+#                 : PS>.\Network_switch_auto_backup.ps1 fortigate (For Fortigate Firewall)
+#                 : PS>.\Network_switch_auto_backup.ps1 All (For All the above)
 ################################################################################
 
 
@@ -163,9 +164,43 @@ Begin {
         }
     }
 
+    Function fortigate()
+    {
+
+        Write-Host ("Getting switch ip address from fortigate.txt list")
+
+        # Collect all the devices from fortigate.txt and put into the array
+        $switches_array = @()
+        $switches_array = Get-Content $ContentFolder\fortigate.txt
+        foreach ($switch in $switches_array) {
+            # create a folder for every device
+            Get-Item "$PSScriptRoot\$year\$today\$switch" -ErrorAction SilentlyContinue
+            if (!$?) {
+                New-Item "$PSScriptRoot\$year\$today\$switch" -ItemType Director
+            }
+
+            # start the SSH Session
+            New-SSHSession -ComputerName $switch -Credential $Cred -AcceptKey:$true -Force
+            $session = Get-SSHSession -Index 0
+            # usual SSH won't work for many switches, so using shell stream
+            $stream = $session.Session.CreateShellStream("dumb", 80, 9999, 800, 600, 1024)
+            # send a "space" for the "Press any key to continue" and wait before you issue the next command
+            $stream.Write("`n")
+            Sleep 10
+            # copy startup-config and wait before you issue the next command
+            $stream.Write("execute backup config tftp fortigatebak.cfg $tftp_server \$year\$today\$switch\")
+            $stream.Write("`n")
+            Write-Host ("Copying startup-config of $switch into tftp server's defined storage location")
+            Sleep 10
+            # disconnect from host
+            Remove-SSHSession -SessionId 0
+        }
+    }
+
     if ($devicename -like "HP") {hp continue; }
     elseif ($devicename -like "Cisco") {cisco continue; }
-    elseif ($devicename -like "Both") {hp continue; cisco continue; }
+    elseif ($devicename -like "fortigate") {forti continue; }
+    elseif ($devicename -like "All") {hp continue; cisco continue; fortigate continue; }
     else {Write-host "Enter valid options"} 
     
     Write-Host ("Configuration backup has been saved into thedefined location, stopping tftp server.....")

@@ -1,3 +1,21 @@
+
+# Network-Device-Configuration-Backup
+
+The Script can be used to automate the configuration backup of network devices using SSH and TFTP Server
+
+# Pre-requisites
+
+1. Windows PowerShell version 5.0 or above
+2. Posh-SSH module should be installed on windows PowerShell
+3. Install and configure a TFTP Server
+4. SSH should be enabled on all network devices
+5. All devices should be configured with same login credentials (Read only)
+6. After logging in, the devices should be in "Enable" (Privileged #) mode
+7. Network devices firmware should be in-line with industry standards
+8. Add IP address of devices into hp.txt and Cisco.txt
+9. Not recommended to run on any servers installed with SCCM, WDS or any other tftp services.
+10. Login credential need to be encrypted and saved in a text file pass.txt. Copy the pass.txt file into the script “content” folder
+
 How to Convert
 
 Open Administrative PowerShell window and execute the command below.

@@ -188,7 +188,7 @@ Begin {
             $stream.Write("`n")
             Sleep 10
             # copy startup-config and wait before you issue the next command
-            $stream.Write("execute backup config tftp fortigatebak.cfg $tftp_server \$year\$today\$switch\")
+            $stream.Write("execute backup config tftp $switch\bak.cfg $tftp_server")
             $stream.Write("`n")
             Write-Host ("Copying startup-config of $switch into tftp server's defined storage location")
             Sleep 10
@@ -199,12 +199,12 @@ Begin {
 
     if ($devicename -like "HP") {hp continue; }
     elseif ($devicename -like "Cisco") {cisco continue; }
-    elseif ($devicename -like "fortigate") {forti continue; }
+    elseif ($devicename -like "fortigate") {fortigate continue; }
     elseif ($devicename -like "All") {hp continue; cisco continue; fortigate continue; }
     else {Write-host "Enter valid options"} 
     
-    Write-Host ("Configuration backup has been saved into thedefined location, stopping tftp server.....")
-    Sleep 20
+    Write-Host ("Configuration backup has been saved into the defined location, stopping tftp server.....")
+    Sleep 15
     Stop-Process -Name tftpd64
     Write-Host ("TFTP Server stopped")
     Write-Host ("End")

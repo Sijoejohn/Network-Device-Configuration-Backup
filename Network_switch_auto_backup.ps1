@@ -25,7 +25,7 @@ Param
 Begin {
 
     write-host $devicename
-    $tftpfolder = "$PSScriptRoot\tftpd64"
+    $tftpfolder = "$PSScriptRoot"
     Write-Host ("Starting TFTP Server")
     Invoke-Item "$PSScriptRoot\tftpd64\tftpd64.exe"
 
